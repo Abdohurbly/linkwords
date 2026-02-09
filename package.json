@@ -1,0 +1,21 @@
+{
+    "name": "linkwords",
+    "version": "1.0.0",
+    "description": "LinkWords - Daily Word Puzzle. Find 4 groups of 4 connected words.",
+    "private": true,
+    "scripts": {
+        "dev": "python -m http.server 3000",
+        "serve": "npx serve . -p 3000"
+    },
+    "keywords": [
+        "word game",
+        "puzzle",
+        "html5 game",
+        "msn games",
+        "microsoft start",
+        "connections",
+        "daily puzzle"
+    ],
+    "author": "LinkWords",
+    "license": "MIT"
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>LinkWords - Daily Word Puzzle</title>
+
+    <!-- SEO & Social -->
+    <meta name="description" content="Find 4 groups of 4 connected words. A free daily brain teaser with timed, practice, and challenge modes.">
+    <meta name="keywords" content="word game, puzzle, daily puzzle, connections, brain teaser, free game">
+    <meta name="author" content="LinkWords">
+    <meta name="theme-color" content="#6c63ff">
+
+    <!-- Open Graph (Facebook, LinkedIn, Discord, etc) -->
+    <meta property="og:title" content="LinkWords - Daily Word Puzzle">
+    <meta property="og:description" content="Find 4 groups of 4 connected words. Can you beat my score?">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="icon.svg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="LinkWords - Daily Word Puzzle">
+    <meta name="twitter:description" content="Find 4 groups of 4 connected words. Can you beat my score?">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LinkWords">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="particle-canvas"></div>
+
+    <div id="app">
+        <header>
+            <h1>LinkWords</h1>
+            <p class="subtitle">Find 4 groups of 4 connected words</p>
+        </header>
+
+        <!-- Start Screen -->
+        <div id="screen-start" class="screen active">
+            <div class="start-content">
+                <div class="logo-large">LW</div>
+                <h2 id="start-title">Daily Puzzle</h2>
+                <p class="puzzle-number" id="puzzle-number"></p>
+                <p class="difficulty-label" id="difficulty-label"></p>
+                <div class="mode-buttons">
+                    <button class="btn btn-primary btn-large" id="btn-play">Play Daily</button>
+                    <button class="btn btn-timed btn-large" id="btn-timed">Timed Mode <span class="badge">90s</span></button>
+                    <button class="btn btn-practice btn-large" id="btn-practice">Practice Mode</button>
+                    <button class="btn btn-accent btn-large" id="btn-challenge">Challenge a Friend</button>
+                </div>
+                <div class="streak-display" id="start-streak"></div>
+                <p class="sound-toggle" id="sound-toggle">Sound: ON</p>
+                <p class="kb-hint">Keyboard: Arrow keys + Space to select, Enter to submit</p>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="screen-game" class="screen">
+            <div class="game-hud">
+                <div class="hud-left">
+                    <div class="timer" id="timer">0:00</div>
+                </div>
+                <div class="hud-center">
+                    <div class="hud-mode-badge" id="hud-mode-badge" style="display:none"></div>
+                    <div class="mistakes" id="mistakes">
+                        <div class="dots" id="mistake-dots"></div>
+                    </div>
+                </div>
+                <div class="hud-right">
+                    <div class="score-display" id="score-display">0 pts</div>
+                </div>
+            </div>
+
+            <!-- Timed mode progress bar -->
+            <div class="timer-bar-container" id="timer-bar-container" style="display:none">
+                <div class="timer-bar" id="timer-bar"></div>
+            </div>
+
+            <div class="solved-groups" id="solved-groups"></div>
+            <div class="grid" id="grid"></div>
+
+            <div class="game-controls">
+                <button class="btn btn-secondary" id="btn-shuffle">Shuffle</button>
+                <button class="btn btn-secondary" id="btn-deselect">Deselect All</button>
+                <button class="btn btn-primary" id="btn-submit" disabled>Submit</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="screen-result" class="screen">
+            <div class="result-content">
+                <h2 id="result-title"></h2>
+                <div class="result-score-big" id="result-score-big"></div>
+                <div class="result-mode-badge" id="result-mode-badge" style="display:none"></div>
+                <div class="result-groups" id="result-groups"></div>
+                <div class="result-grid" id="result-grid"></div>
+                <div class="result-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="stat-time">0:00</span>
+                        <span class="stat-label">Time</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-score">0</span>
+                        <span class="stat-label">Score</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-streak">0</span>
+                        <span class="stat-label">Streak</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-played">0</span>
+                        <span class="stat-label">Played</span>
+                    </div>
+                </div>
+
+                <!-- Challenge Section -->
+                <div class="challenge-section" id="challenge-section">
+                    <div class="challenge-vs" id="challenge-vs" style="display:none">
+                        <h3>Challenge Result</h3>
+                        <div class="vs-row">
+                            <div class="vs-player">
+                                <span class="vs-label">You</span>
+                                <span class="vs-score" id="vs-my-score">0</span>
+                            </div>
+                            <div class="vs-divider">VS</div>
+                            <div class="vs-player">
+                                <span class="vs-label">Friend</span>
+                                <span class="vs-score" id="vs-friend-score">0</span>
+                            </div>
+                        </div>
+                        <p class="vs-result" id="vs-result"></p>
+                    </div>
+                </div>
+
+                <div class="result-buttons">
+                    <button class="btn btn-primary" id="btn-share">Share Results</button>
+                    <button class="btn btn-accent" id="btn-challenge-share">Challenge a Friend</button>
+                </div>
+                <button class="btn btn-practice btn-play-again" id="btn-play-again" style="display:none">Play Again</button>
+                <p class="next-puzzle" id="next-puzzle"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="puzzles.js"></script>
+    <script src="sfx.js"></script>
+    <script src="msstart-sdk.js"></script>
+    <script src="game.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js").catch(() => {});
+        }
+    </script>
+</body>
+</html>

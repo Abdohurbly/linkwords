@@ -1,0 +1,666 @@
+/* ============================================
+   LinkWords v3 - Daily Word Puzzle
+   Modes: Daily, Timed, Practice, Challenge
+   + Keyboard Nav, Difficulty Progression
+   ============================================ */
+
+:root {
+    --bg: #0f0f0f;
+    --surface: #1a1a2e;
+    --surface-hover: #252540;
+    --text: #eaeaea;
+    --text-dim: #8888aa;
+    --accent: #6c63ff;
+    --accent-hover: #5a52e0;
+    --selected: #6c63ff;
+    --selected-text: #ffffff;
+    --error: #ff4757;
+
+    --group-0: #f7c948;
+    --group-0-text: #1a1a2e;
+    --group-1: #48c774;
+    --group-1-text: #1a1a2e;
+    --group-2: #3e8ed0;
+    --group-2-text: #ffffff;
+    --group-3: #b86bff;
+    --group-3-text: #ffffff;
+
+    --timed: #ff6b35;
+    --practice: #48c774;
+
+    --radius: 10px;
+    --radius-lg: 16px;
+    --transition: 0.2s ease;
+    --max-width: 520px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+    width: 100%;
+    max-width: var(--max-width);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* ---- Header ---- */
+header {
+    text-align: center;
+    padding: 10px 0 6px;
+    width: 100%;
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--group-0), var(--group-1), var(--group-2), var(--group-3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* ---- Screens ---- */
+.screen {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.screen.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Start Screen ---- */
+.start-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-top: 24px;
+}
+
+.logo-large {
+    width: 90px;
+    height: 90px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, var(--group-0), var(--group-3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 900;
+    color: #1a1a2e;
+    letter-spacing: 2px;
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.start-content h2 {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.puzzle-number {
+    color: var(--text-dim);
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.difficulty-label {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.difficulty-label.tier-1 {
+    background: rgba(72, 199, 116, 0.15);
+    color: var(--group-1);
+}
+
+.difficulty-label.tier-2 {
+    background: rgba(247, 201, 72, 0.15);
+    color: var(--group-0);
+}
+
+.difficulty-label.tier-3 {
+    background: rgba(255, 71, 87, 0.15);
+    color: var(--error);
+}
+
+.streak-display {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.sound-toggle {
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.sound-toggle:hover { color: var(--text); }
+
+.kb-hint {
+    color: #555577;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* ---- Buttons ---- */
+.btn {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: var(--radius);
+    transition: all var(--transition);
+    font-size: 15px;
+    padding: 12px 32px;
+    user-select: none;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-large { padding: 13px 36px; font-size: 15px; }
+
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-primary:disabled {
+    background: #333355;
+    color: #555577;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid #333355;
+}
+
+.btn-secondary:hover { background: var(--surface-hover); }
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--group-1), var(--group-2));
+    color: white;
+}
+
+.btn-accent:hover { opacity: 0.9; }
+
+.btn-timed {
+    background: linear-gradient(135deg, var(--timed), #ff8c42);
+    color: white;
+    position: relative;
+}
+
+.btn-timed:hover { opacity: 0.9; }
+
+.btn-practice {
+    background: var(--surface);
+    color: var(--practice);
+    border: 1px solid var(--practice);
+}
+
+.btn-practice:hover { background: rgba(72, 199, 116, 0.1); }
+
+.badge {
+    font-size: 11px;
+    font-weight: 800;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.btn-play-again {
+    margin-top: 4px;
+    width: 100%;
+    max-width: 280px;
+}
+
+/* ---- Game HUD ---- */
+.game-hud {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 6px 0;
+}
+
+.hud-left, .hud-right { flex: 1; }
+.hud-right { text-align: right; }
+.hud-center {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.timer {
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    transition: color 0.3s;
+}
+
+.timer-countdown { color: var(--timed); }
+.timer-danger { color: var(--error); animation: timerPulse 0.5s ease infinite; }
+
+@keyframes timerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.score-display {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--group-0);
+    font-variant-numeric: tabular-nums;
+}
+
+.hud-mode-badge, .result-mode-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badge-timed {
+    background: rgba(255, 107, 53, 0.2);
+    color: var(--timed);
+}
+
+.badge-practice {
+    background: rgba(72, 199, 116, 0.15);
+    color: var(--practice);
+}
+
+/* ---- Timer Bar ---- */
+.timer-bar-container {
+    width: 100%;
+    height: 4px;
+    background: #222244;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--timed), #ff8c42);
+    border-radius: 2px;
+    transition: width 0.25s linear;
+}
+
+.mistakes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-dim);
+}
+
+.dots { display: flex; gap: 6px; }
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--error);
+    transition: all 0.3s ease;
+}
+
+.dot.used { background: #333355; transform: scale(0.7); }
+
+/* ---- Solved Groups ---- */
+.solved-groups {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.solved-group {
+    width: 100%;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    text-align: center;
+    animation: solvedReveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.solved-group .group-name {
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.solved-group .group-words { font-size: 13px; opacity: 0.85; }
+
+@keyframes solvedReveal {
+    0% { transform: scaleY(0) scaleX(0.95); opacity: 0; }
+    60% { transform: scaleY(1.05) scaleX(1); }
+    100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+}
+
+/* ---- Grid ---- */
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.tile {
+    aspect-ratio: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--surface);
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    padding: 6px;
+    word-break: break-word;
+    line-height: 1.2;
+    border: 2px solid transparent;
+    outline: none;
+}
+
+.tile:hover { background: var(--surface-hover); }
+
+.tile.focused {
+    border-color: rgba(108, 99, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+}
+
+.tile.selected {
+    background: var(--selected);
+    color: var(--selected-text);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+}
+
+.tile.selected.focused {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.tile.shake { animation: shake 0.5s ease; }
+.tile.pop { animation: pop 0.3s ease; }
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+
+/* ---- Game Controls ---- */
+.game-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    width: 100%;
+    justify-content: center;
+}
+
+.game-controls .btn { padding: 10px 20px; font-size: 14px; }
+
+/* ---- Result Screen ---- */
+.result-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-top: 12px;
+    width: 100%;
+}
+
+.result-content h2 { font-size: 26px; }
+
+.result-score-big {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.result-score-big.glow {
+    background: linear-gradient(135deg, var(--group-0), var(--group-1), var(--group-2), var(--group-3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: scoreGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes scoreGlow {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.3); }
+}
+
+.result-groups {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.result-grid {
+    font-size: 28px;
+    line-height: 1.5;
+    text-align: center;
+    letter-spacing: 2px;
+    padding: 6px 0;
+}
+
+.result-stats {
+    display: flex;
+    gap: 18px;
+    padding: 10px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 55px;
+}
+
+.stat-value { font-size: 24px; font-weight: 800; }
+.stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ---- Challenge VS ---- */
+.challenge-section { width: 100%; }
+
+.challenge-vs {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+}
+
+.challenge-vs h3 {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.vs-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.vs-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.vs-label { font-size: 13px; color: var(--text-dim); }
+.vs-score { font-size: 32px; font-weight: 900; color: var(--accent); }
+.vs-divider { font-size: 20px; font-weight: 800; color: var(--text-dim); }
+.vs-result { margin-top: 12px; font-size: 16px; font-weight: 700; }
+
+/* ---- Result Buttons ---- */
+.result-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 340px;
+}
+
+.result-buttons .btn {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+}
+
+.next-puzzle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+/* ---- Toast ---- */
+.toast {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-30px);
+    background: var(--surface);
+    color: var(--text);
+    padding: 10px 28px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #444466;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 200;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ---- Particles ---- */
+#particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: particleFly 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes particleFly {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 400px) {
+    .tile { font-size: 11px; aspect-ratio: 1.4; }
+    .game-controls { flex-wrap: wrap; }
+    .game-controls .btn { flex: 1; min-width: 90px; }
+    .result-buttons { flex-direction: column; }
+    .result-score-big { font-size: 36px; }
+    .vs-score { font-size: 26px; }
+    .mode-buttons { max-width: 100%; }
+}
+
+@media (min-width: 500px) {
+    .tile { font-size: 15px; }
+}

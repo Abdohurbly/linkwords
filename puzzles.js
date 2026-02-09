@@ -1,0 +1,310 @@
+// ============================================
+// LinkWords Puzzle Data
+// Each puzzle has 4 groups + a tier (1=easy, 2=medium, 3=hard)
+// Difficulty by day: Mon=1, Tue=1, Wed=2, Thu=2, Fri=3, Sat=3, Sun=3
+// ============================================
+
+const PUZZLES = [
+    // ---- TIER 1: Easy (straightforward categories, less overlap) ----
+    {
+        tier: 1,
+        groups: [
+            { name: "Planets", words: ["MARS", "VENUS", "SATURN", "JUPITER"], difficulty: 0 },
+            { name: "Chocolate Bars", words: ["BOUNTY", "TWIX", "SNICKERS", "KITKAT"], difficulty: 1 },
+            { name: "Card Games", words: ["POKER", "BRIDGE", "SNAP", "HEARTS"], difficulty: 2 },
+            { name: "___ King", words: ["LION", "BURGER", "KONG", "MARTIN LUTHER"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Fruits", words: ["MANGO", "LYCHEE", "PAPAYA", "GUAVA"], difficulty: 0 },
+            { name: "Musical Instruments", words: ["DRUM", "FLUTE", "HARP", "CELLO"], difficulty: 1 },
+            { name: "Greek Letters", words: ["DELTA", "OMEGA", "SIGMA", "ALPHA"], difficulty: 2 },
+            { name: "Things With Teeth", words: ["COMB", "SAW", "ZIPPER", "GEAR"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Dog Breeds", words: ["POODLE", "BOXER", "HUSKY", "BEAGLE"], difficulty: 0 },
+            { name: "Kitchen Appliances", words: ["BLENDER", "TOASTER", "MIXER", "OVEN"], difficulty: 1 },
+            { name: "Dance Styles", words: ["SALSA", "TANGO", "WALTZ", "SWING"], difficulty: 2 },
+            { name: "Also a Punch Type", words: ["HOOK", "JAB", "CROSS", "UPPER"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Breakfast Foods", words: ["WAFFLE", "PANCAKE", "OMELET", "BAGEL"], difficulty: 0 },
+            { name: "Ocean Creatures", words: ["SQUID", "URCHIN", "CORAL", "STARFISH"], difficulty: 1 },
+            { name: "Music Genres", words: ["JAZZ", "BLUES", "PUNK", "SOUL"], difficulty: 2 },
+            { name: "Things That Are Pitched", words: ["TENT", "IDEA", "BALL", "VOICE"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Gemstones", words: ["RUBY", "OPAL", "JADE", "PEARL"], difficulty: 0 },
+            { name: "Types of Keys", words: ["PIANO", "SKELETON", "CAR", "ANSWER"], difficulty: 1 },
+            { name: "Famous Michaels", words: ["JORDAN", "JACKSON", "SCOTT", "PHELPS"], difficulty: 2 },
+            { name: "Hidden Trees", words: ["MAPLE", "ASH", "PINE", "BIRCH"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Baby Animals", words: ["KITTEN", "PUPPY", "DUCKLING", "FOAL"], difficulty: 0 },
+            { name: "Currencies", words: ["POUND", "FRANC", "CROWN", "MARK"], difficulty: 1 },
+            { name: "Things That Tick", words: ["CLOCK", "BOMB", "HEART", "INSECT"], difficulty: 2 },
+            { name: "Words After \"Black\"", words: ["BERRY", "SMITH", "BOARD", "BIRD"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Zoo Animals", words: ["GIRAFFE", "PENGUIN", "ZEBRA", "ELEPHANT"], difficulty: 0 },
+            { name: "Things That Drip", words: ["FAUCET", "CANDLE", "ICICLE", "PAINT"], difficulty: 1 },
+            { name: "Poker Terms", words: ["FOLD", "BLUFF", "RAISE", "FLUSH"], difficulty: 2 },
+            { name: "Hidden Colors", words: ["ORANGE", "TAN", "PLUM", "RUST"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Ice Cream Flavors", words: ["VANILLA", "PISTACHIO", "CARAMEL", "MOCHA"], difficulty: 0 },
+            { name: "Camping Gear", words: ["TENT", "LANTERN", "COMPASS", "COOLER"], difficulty: 1 },
+            { name: "Types of Shot", words: ["FREE THROW", "ESPRESSO", "VACCINE", "HEADSHOT"], difficulty: 2 },
+            { name: "Famous Logos", words: ["APPLE", "SHELL", "TARGET", "AMAZON"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Berries", words: ["BLUEBERRY", "RASPBERRY", "CRANBERRY", "STRAWBERRY"], difficulty: 0 },
+            { name: "Things With Scales", words: ["FISH", "DRAGON", "JUSTICE", "PIANO"], difficulty: 1 },
+            { name: "Textures", words: ["SMOOTH", "ROUGH", "SILKY", "GRAINY"], difficulty: 2 },
+            { name: "Words Before \"BOARD\"", words: ["SKATE", "CARD", "KEY", "CUP"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 1,
+        groups: [
+            { name: "Breakfast Drinks", words: ["COFFEE", "JUICE", "TEA", "MILK"], difficulty: 0 },
+            { name: "Things With Layers", words: ["CAKE", "ONION", "LASAGNA", "EARTH"], difficulty: 1 },
+            { name: "Golf Terms", words: ["BIRDIE", "BOGEY", "EAGLE", "CADDY"], difficulty: 2 },
+            { name: "Hidden Animals", words: ["CROW", "RAM", "ANT", "OWL"], difficulty: 3 }
+        ]
+    },
+
+    // ---- TIER 2: Medium (more cross-category confusion) ----
+    {
+        tier: 2,
+        groups: [
+            { name: "Colors", words: ["CRIMSON", "TEAL", "IVORY", "AMBER"], difficulty: 0 },
+            { name: "Things That Spin", words: ["TOP", "WHEEL", "TORNADO", "RECORD"], difficulty: 1 },
+            { name: "Email Terms", words: ["SPAM", "DRAFT", "INBOX", "THREAD"], difficulty: 2 },
+            { name: "Hidden Body Parts", words: ["ELBOW", "SHIN", "PALM", "CHEST"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Weather", words: ["THUNDER", "HAIL", "SLEET", "FROST"], difficulty: 0 },
+            { name: "Board Games", words: ["RISK", "CLUE", "SORRY", "LIFE"], difficulty: 1 },
+            { name: "Parts of a Book", words: ["SPINE", "JACKET", "CHAPTER", "INDEX"], difficulty: 2 },
+            { name: "Words Before \"Light\"", words: ["FLASH", "MOON", "STAR", "HIGH"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Vegetables", words: ["CARROT", "CELERY", "RADISH", "TURNIP"], difficulty: 0 },
+            { name: "Things With Buttons", words: ["SHIRT", "REMOTE", "ELEVATOR", "ARCADE"], difficulty: 1 },
+            { name: "Types of Wave", words: ["RADIO", "HEAT", "SOUND", "SHOCK"], difficulty: 2 },
+            { name: "Double Letters", words: ["BALLOON", "COFFEE", "PIZZA", "PUPPY"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Olympic Sports", words: ["FENCING", "ROWING", "DIVING", "ARCHERY"], difficulty: 0 },
+            { name: "Pasta Shapes", words: ["PENNE", "FUSILLI", "RIGATONI", "ORZO"], difficulty: 1 },
+            { name: "Social Media Actions", words: ["SHARE", "FOLLOW", "BLOCK", "TAG"], difficulty: 2 },
+            { name: "___ Stone", words: ["ROLLING", "KEY", "MILE", "CORNER"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Herbs", words: ["BASIL", "THYME", "SAGE", "MINT"], difficulty: 0 },
+            { name: "Things That Fly", words: ["KITE", "DRONE", "BULLET", "RUMOR"], difficulty: 1 },
+            { name: "Movie Genres", words: ["HORROR", "WESTERN", "THRILLER", "NOIR"], difficulty: 2 },
+            { name: "Also a Name", words: ["FRANK", "BILL", "GRACE", "MARK"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Citrus Fruits", words: ["LEMON", "LIME", "GRAPEFRUIT", "TANGERINE"], difficulty: 0 },
+            { name: "Hairstyles", words: ["MULLET", "PONYTAIL", "BRAIDS", "MOHAWK"], difficulty: 1 },
+            { name: "Things in a Wallet", words: ["CASH", "LICENSE", "RECEIPT", "PHOTO"], difficulty: 2 },
+            { name: "Words Before \"Work\"", words: ["FRAME", "NET", "FIRE", "HOME"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Pizza Toppings", words: ["OLIVE", "PEPPER", "ONION", "ANCHOVY"], difficulty: 0 },
+            { name: "Things With Wings", words: ["AIRPLANE", "ANGEL", "BUTTERFLY", "BUILDING"], difficulty: 1 },
+            { name: "Chess Pieces", words: ["ROOK", "BISHOP", "KNIGHT", "PAWN"], difficulty: 2 },
+            { name: "___ Ball", words: ["SNOW", "FIRE", "EYE", "BASKET"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Beverages", words: ["LATTE", "SMOOTHIE", "CIDER", "COCOA"], difficulty: 0 },
+            { name: "Office Supplies", words: ["STAPLER", "BINDER", "ERASER", "MARKER"], difficulty: 1 },
+            { name: "Types of Chart", words: ["BAR", "PIE", "LINE", "SCATTER"], difficulty: 2 },
+            { name: "Words After \"FIRE\"", words: ["PLACE", "TRUCK", "WORK", "FLY"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Flowers", words: ["TULIP", "ORCHID", "DAISY", "LILY"], difficulty: 0 },
+            { name: "Things That Pop", words: ["BALLOON", "CORN", "BUBBLE", "CHAMPAGNE"], difficulty: 1 },
+            { name: "TV Show Formats", words: ["SITCOM", "DRAMA", "REALITY", "GAME SHOW"], difficulty: 2 },
+            { name: "Words Before \"HOUSE\"", words: ["WARE", "GREEN", "FIRE", "POWER"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 2,
+        groups: [
+            { name: "Soup Types", words: ["CHOWDER", "BISQUE", "RAMEN", "GUMBO"], difficulty: 0 },
+            { name: "Things That Ring", words: ["BELL", "PHONE", "ALARM", "BOXER"], difficulty: 1 },
+            { name: "Art Supplies", words: ["CANVAS", "EASEL", "PALETTE", "CHARCOAL"], difficulty: 2 },
+            { name: "Words Before \"POINT\"", words: ["GUN", "CHECK", "VIEW", "POWER"], difficulty: 3 }
+        ]
+    },
+
+    // ---- TIER 3: Hard (tricky overlaps, misdirection, abstract links) ----
+    {
+        tier: 3,
+        groups: [
+            { name: "Shoes", words: ["LOAFER", "SANDAL", "SNEAKER", "BOOT"], difficulty: 0 },
+            { name: "Things in Space", words: ["COMET", "NEBULA", "QUASAR", "PULSAR"], difficulty: 1 },
+            { name: "Computer Parts", words: ["MOUSE", "CHIP", "DRIVER", "BUS"], difficulty: 2 },
+            { name: "Types of Run", words: ["HOME", "TRIAL", "BULL", "DRY"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Birds", words: ["ROBIN", "HAWK", "CRANE", "SWIFT"], difficulty: 0 },
+            { name: "Things With Handles", words: ["MUG", "DOOR", "SUITCASE", "PAN"], difficulty: 1 },
+            { name: "Types of Market", words: ["FLEA", "STOCK", "BLACK", "SUPER"], difficulty: 2 },
+            { name: "Also a Verb", words: ["DUCK", "BAT", "BOLT", "TRIP"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Desserts", words: ["BROWNIE", "TIRAMISU", "MOUSSE", "SUNDAE"], difficulty: 0 },
+            { name: "Things That Are Round", words: ["GLOBE", "COIN", "PIZZA", "MOON"], difficulty: 1 },
+            { name: "Photography Terms", words: ["EXPOSURE", "FLASH", "FRAME", "FILTER"], difficulty: 2 },
+            { name: "Double Meanings", words: ["BARK", "MATCH", "SPRING", "DRAFT"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Nuts", words: ["ALMOND", "CASHEW", "WALNUT", "PECAN"], difficulty: 0 },
+            { name: "Things That Glow", words: ["EMBER", "NEON", "FIREFLY", "LAVA"], difficulty: 1 },
+            { name: "Types of Code", words: ["ZIP", "AREA", "MORSE", "DRESS"], difficulty: 2 },
+            { name: "Famous Pairs (One Half)", words: ["ROMEO", "SALT", "BONNIE", "BREAD"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Spices", words: ["CUMIN", "PAPRIKA", "SAFFRON", "TURMERIC"], difficulty: 0 },
+            { name: "Things at a Circus", words: ["TRAPEZE", "JUGGLER", "CANNON", "TIGHTROPE"], difficulty: 1 },
+            { name: "Video Game Genres", words: ["PLATFORMER", "SHOOTER", "ROGUE", "SANDBOX"], difficulty: 2 },
+            { name: "Words That Mean Fast", words: ["SWIFT", "RAPID", "FLEET", "BRISK"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Cheese Types", words: ["BRIE", "GOUDA", "FETA", "CHEDDAR"], difficulty: 0 },
+            { name: "Things With Stripes", words: ["ZEBRA", "TIGER", "BARBER POLE", "CANDY CANE"], difficulty: 1 },
+            { name: "Ship Parts", words: ["HULL", "MAST", "ANCHOR", "STERN"], difficulty: 2 },
+            { name: "___ Way", words: ["HIGH", "RAIL", "STAIR", "GATE"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Dances", words: ["RUMBA", "FOXTROT", "CHA-CHA", "SAMBA"], difficulty: 0 },
+            { name: "Things That Sting", words: ["BEE", "NETTLE", "JELLYFISH", "COMMENT"], difficulty: 1 },
+            { name: "Elements", words: ["NEON", "IRON", "GOLD", "MERCURY"], difficulty: 2 },
+            { name: "Also a Planet", words: ["EARTH", "MARS", "PLUTO", "SATURN"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Fabrics", words: ["SILK", "DENIM", "VELVET", "LINEN"], difficulty: 0 },
+            { name: "Things That Bounce", words: ["BALL", "CHECK", "TRAMPOLINE", "IDEA"], difficulty: 1 },
+            { name: "Film Roles", words: ["LEAD", "EXTRA", "STUNT", "VILLAIN"], difficulty: 2 },
+            { name: "Words After \"BACK\"", words: ["FIRE", "BONE", "TRACK", "STAGE"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Sandwiches", words: ["CLUB", "WRAP", "PANINI", "HOAGIE"], difficulty: 0 },
+            { name: "Things With Strings", words: ["GUITAR", "PUPPET", "KITE", "BOW"], difficulty: 1 },
+            { name: "Types of Band", words: ["ROCK", "RUBBER", "WEDDING", "MARCHING"], difficulty: 2 },
+            { name: "Words After \"HAND\"", words: ["SHAKE", "BAG", "OUT", "MADE"], difficulty: 3 }
+        ]
+    },
+    {
+        tier: 3,
+        groups: [
+            { name: "Hats", words: ["BERET", "FEDORA", "BEANIE", "TURBAN"], difficulty: 0 },
+            { name: "Things That Melt", words: ["ICE", "CHEESE", "CANDLE", "HEART"], difficulty: 1 },
+            { name: "Magic Words", words: ["PRESTO", "ABRACADABRA", "HOCUS", "VOILA"], difficulty: 2 },
+            { name: "___ Man", words: ["SPIDER", "IRON", "BAT", "PAC"], difficulty: 3 }
+        ]
+    }
+];
+
+// ---- Difficulty by day of week ----
+// 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+const DAY_TIER_MAP = {
+    1: 1,  // Monday    -> Easy
+    2: 1,  // Tuesday   -> Easy
+    3: 2,  // Wednesday -> Medium
+    4: 2,  // Thursday  -> Medium
+    5: 3,  // Friday    -> Hard
+    6: 3,  // Saturday  -> Hard
+    0: 3   // Sunday    -> Hard
+};
+
+const DAY_LABELS = {
+    1: "Easy Monday",
+    2: "Easy Tuesday",
+    3: "Medium Wednesday",
+    4: "Medium Thursday",
+    5: "Hard Friday",
+    6: "Hard Saturday",
+    0: "Hard Sunday"
+};
+
+// Helper: get puzzles filtered by tier
+function getPuzzlesByTier(tier) {
+    return PUZZLES.filter(p => p.tier === tier);
+}
