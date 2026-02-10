@@ -664,3 +664,12 @@ header h1 {
 @media (min-width: 500px) {
     .tile { font-size: 15px; }
 }
+
+/* Ad Banner */
+.ad-container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 16px auto 0;
+    padding: 0 12px;
+    text-align: center;
+}
