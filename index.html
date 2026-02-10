@@ -32,10 +32,17 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Google AdSense -->
+    <!-- Google AdSense (disabled on CrazyGames/Poki - they handle their own ads) -->
     <meta name="google-adsense-account" content="ca-pub-8897586873444375">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8897586873444375"
-         crossorigin="anonymous"></script>
+    <script>
+        if (!window.location.hostname.includes('crazygames') && !window.location.hostname.includes('poki')) {
+            var s = document.createElement('script');
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8897586873444375';
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            document.head.appendChild(s);
+        }
+    </script>
 </head>
 <body>
     <div id="particle-canvas"></div>
@@ -155,15 +162,21 @@
 
     <div class="toast" id="toast"></div>
 
-    <!-- Ad Banner -->
-    <div class="ad-container">
+    <!-- Ad Banner (hidden on CrazyGames/Poki) -->
+    <div class="ad-container" id="adsense-container">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-8897586873444375"
              data-ad-slot="auto"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <script>
+            if (!window.location.hostname.includes('crazygames') && !window.location.hostname.includes('poki')) {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } else {
+                document.getElementById('adsense-container').style.display = 'none';
+            }
+        </script>
     </div>
 
     <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
