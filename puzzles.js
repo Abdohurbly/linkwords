@@ -12,7 +12,7 @@ const PUZZLES = [
             { name: "Planets", words: ["MARS", "VENUS", "SATURN", "JUPITER"], difficulty: 0 },
             { name: "Chocolate Bars", words: ["BOUNTY", "TWIX", "SNICKERS", "KITKAT"], difficulty: 1 },
             { name: "Card Games", words: ["POKER", "BRIDGE", "SNAP", "HEARTS"], difficulty: 2 },
-            { name: "___ King", words: ["LION", "BURGER", "KONG", "MARTIN LUTHER"], difficulty: 3 }
+            { name: "___ King", words: ["LION", "BURGER", "KONG", "DRAG"], difficulty: 3 }
         ]
     },
     {
@@ -172,7 +172,7 @@ const PUZZLES = [
         tier: 1,
         groups: [
             { name: "Planets (Outer)", words: ["NEPTUNE", "URANUS", "PLUTO", "SATURN"], difficulty: 0 },
-            { name: "Things in a Backpack", words: ["LAPTOP", "NOTEBOOK", "WATER BOTTLE", "CHARGER"], difficulty: 1 },
+            { name: "Things in a Backpack", words: ["LAPTOP", "NOTEBOOK", "PENCIL", "CHARGER"], difficulty: 1 },
             { name: "Things That Grow", words: ["TREE", "CHILD", "BUSINESS", "CRYSTAL"], difficulty: 2 },
             { name: "Words Before \"BACK\"", words: ["DRAW", "SET", "FEED", "COME"], difficulty: 3 }
         ]
@@ -182,7 +182,7 @@ const PUZZLES = [
         tier: 1,
         groups: [
             { name: "Pizza Styles", words: ["MARGHERITA", "PEPPERONI", "HAWAIIAN", "CALZONE"], difficulty: 0 },
-            { name: "Things With Wheels", words: ["SKATEBOARD", "SUITCASE", "OFFICE CHAIR", "SHOPPING CART"], difficulty: 1 },
+            { name: "Things With Wheels", words: ["SKATEBOARD", "SUITCASE", "WAGON", "STROLLER"], difficulty: 1 },
             { name: "Things That Fade", words: ["MEMORY", "JEANS", "TAN", "SUNSET"], difficulty: 2 },
             { name: "Words Before \"STONE\"", words: ["LIME", "KEY", "MILE", "TOMB"], difficulty: 3 }
         ]
@@ -217,7 +217,7 @@ const PUZZLES = [
     {
         tier: 1,
         groups: [
-            { name: "Dessert Toppings", words: ["SPRINKLES", "WHIPPED CREAM", "SYRUP", "CHERRY"], difficulty: 0 },
+            { name: "Dessert Toppings", words: ["SPRINKLES", "FUDGE", "SYRUP", "CHERRY"], difficulty: 0 },
             { name: "Things With Lids", words: ["JAR", "POT", "TRASH CAN", "EYE"], difficulty: 1 },
             { name: "Things That Hiss", words: ["SNAKE", "STEAM", "CAT", "TIRE"], difficulty: 2 },
             { name: "___ Time", words: ["BED", "HALF", "PRIME", "OVER"], difficulty: 3 }
