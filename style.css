@@ -264,7 +264,7 @@ header h1 {
     vertical-align: middle;
 }
 
-.btn-play-again {
+.btn-play-again, #btn-home {
     margin-top: 4px;
     width: 100%;
     max-width: 280px;

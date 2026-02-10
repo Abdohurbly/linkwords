@@ -425,6 +425,7 @@
         $("btn-share").onclick = shareResults;
         $("btn-challenge-share").onclick = shareChallenge;
         $("btn-play-again").onclick = playAgain;
+        $("btn-home").onclick = goHome;
         $("sound-toggle").onclick = toggleSound;
         $("sound-toggle").textContent = SFX.isEnabled() ? "Sound: ON" : "Sound: OFF";
 
@@ -467,9 +468,13 @@
         } else if (state.mode === "practice") {
             startPracticeMode();
         } else {
-            // For daily/challenge, go back to start
-            window.location.href = window.location.pathname;
+            goHome();
         }
+    }
+
+    function goHome() {
+        stopTimer();
+        showScreen("start");
     }
 
     function loadSavedGame() {
@@ -829,6 +834,11 @@
         // Play Again button for timed/practice
         $("btn-play-again").style.display = (state.mode === "timed" || state.mode === "practice") ? "" : "none";
 
+        // Hide challenge button on external platforms (URL won't work in iframe)
+        if (CrazyGamesSDK.isAvailable()) {
+            $("btn-challenge-share").style.display = "none";
+        }
+
         // Countdown for daily
         if (state.mode === "daily") {
             updateCountdown();
@@ -860,9 +870,22 @@
 
     function copyOrShare(text) {
         if (navigator.share) {
-            navigator.share({ text }).catch(() => {});
-        } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!"));
+            navigator.share({ text }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+                .then(() => showToast("Copied to clipboard!"))
+                .catch(() => showToast("Score: " + state.score + " pts"));
+        } else {
+            // Iframe fallback - just show the score
+            showToast("Score: " + state.score + " pts");
         }
     }
 
