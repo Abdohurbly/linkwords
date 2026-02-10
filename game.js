@@ -543,9 +543,10 @@
         startTimer();
         SFX.tap();
 
-        // MSStart SDK: report game start
+        // SDK: report game start
         MSStartSDK.onGameStart(state.mode);
         MSStartSDK.preloadAd();
+        CrazyGamesSDK.onGameplayStart();
     }
 
     // ---- Rendering ----
@@ -704,8 +705,9 @@
         setTimeout(() => burstFromElement(div, `--${GROUP_COLORS[group.difficulty]}`), 100);
         renderGrid();
 
-        // MSStart SDK: report level/group complete
+        // SDK: report level/group complete
         MSStartSDK.onLevelComplete(state.solved.length, calculateScore());
+        CrazyGamesSDK.onHappyTime();
 
         if (state.solved.length === 4) {
             state.gameOver = true;
@@ -749,9 +751,11 @@
         recordResult(state.won, state.score);
         saveGameState();
 
-        // MSStart SDK: report game end + show ad between rounds
+        // SDK: report game end + show ad between rounds
         MSStartSDK.onGameEnd(state.won, state.score, state.timerElapsed);
-        MSStartSDK.showInterstitialAd(); // non-blocking, shows if available
+        MSStartSDK.showInterstitialAd();
+        CrazyGamesSDK.onGameplayStop();
+        CrazyGamesSDK.showMidgameAd();
 
         // Title
         if (state.won) {
@@ -878,8 +882,11 @@
         setTimeout(() => toast.classList.remove("show"), 2000);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
         MSStartSDK.init();
+        await CrazyGamesSDK.init();
+        CrazyGamesSDK.onLoadingStart();
         init();
+        CrazyGamesSDK.onLoadingStop();
     });
 })();
