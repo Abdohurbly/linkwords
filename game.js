@@ -406,15 +406,7 @@
         if (stats.bestTimed > 0) parts.push(`Timed best: ${stats.bestTimed}`);
         if (parts.length) $("start-streak").innerHTML = parts.join(" &nbsp;|&nbsp; ");
 
-        // If played today, show results
-        if (state.mode === "daily" && hasPlayedToday()) {
-            loadSavedGame();
-            return;
-        }
-
-        showScreen("start");
-
-        // Event listeners
+        // Event listeners (always bind)
         $("btn-play").onclick = () => { state.mode = "daily"; startGame(); };
         $("btn-timed").onclick = startTimedMode;
         $("btn-practice").onclick = startPracticeMode;
@@ -430,6 +422,14 @@
         $("sound-toggle").textContent = SFX.isEnabled() ? "Sound: ON" : "Sound: OFF";
 
         initKeyboard();
+
+        // If played today, show results
+        if (state.mode === "daily" && hasPlayedToday()) {
+            loadSavedGame();
+            return;
+        }
+
+        showScreen("start");
     }
 
     function toggleSound() {
@@ -473,7 +473,10 @@
     }
 
     function goHome() {
-        stopTimer();
+        try { stopTimer(); } catch(e) {}
+        state.gameOver = false;
+        state.selected = [];
+        state.solved = [];
         showScreen("start");
     }
 
