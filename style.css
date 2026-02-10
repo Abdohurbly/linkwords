@@ -56,6 +56,7 @@ body {
     align-items: center;
     position: relative;
     z-index: 1;
+    overflow: hidden;
 }
 
 /* ---- Header ---- */
@@ -422,11 +423,14 @@ header h1 {
     cursor: pointer;
     transition: all var(--transition);
     user-select: none;
-    padding: 6px;
+    padding: 4px;
     word-break: break-word;
+    overflow-wrap: break-word;
     line-height: 1.2;
     border: 2px solid transparent;
     outline: none;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .tile:hover { background: var(--surface-hover); }
@@ -652,9 +656,11 @@ header h1 {
 
 /* ---- Responsive ---- */
 @media (max-width: 400px) {
-    .tile { font-size: 11px; aspect-ratio: 1.4; }
-    .game-controls { flex-wrap: wrap; }
-    .game-controls .btn { flex: 1; min-width: 90px; }
+    #app { padding: 10px; }
+    .grid { gap: 6px; }
+    .tile { font-size: 11px; aspect-ratio: 1.4; padding: 3px; }
+    .game-controls { flex-wrap: wrap; gap: 6px; }
+    .game-controls .btn { flex: 1; min-width: 80px; padding: 10px 12px; font-size: 13px; }
     .result-buttons { flex-direction: column; }
     .result-score-big { font-size: 36px; }
     .vs-score { font-size: 26px; }
